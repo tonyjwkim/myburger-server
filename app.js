@@ -1,12 +1,21 @@
 require("dotenv").config();
+require("./configs/firebaseAdmin.js");
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
+const loginRoutes = require("./routes/loginRoutes");
+
 const app = express();
 
 mongoose.connect(process.env.MONGODB_URI);
+app.use(express.json());
+
+app.use(cors());
+
+app.use("/users", loginRoutes);
 
 app.use((req, res) => {
-  res.status(404).send("Sorry, we couldn't find what you're looking for.");
+  res.status(404).send("Not Found");
 });
 
 app.use((err, req, res) => {
