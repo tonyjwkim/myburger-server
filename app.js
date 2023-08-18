@@ -4,15 +4,22 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const loginRoutes = require("./routes/loginRoutes");
+const folderRoutes = require("./routes/folderRoutes");
 
 const app = express();
 
 mongoose.connect(process.env.MONGODB_URI);
-app.use(express.json());
 
-app.use(cors());
+app.use(express.json());
+const corsOptions = {
+  origin: ["chrome-extension://mimcbcghbdkmapmcfpffojgofbjifepg"],
+  methods: "GET,POST,DELETE",
+};
+
+app.use(cors(corsOptions));
 
 app.use("/users", loginRoutes);
+app.use("/users", folderRoutes);
 
 app.use((req, res) => {
   res.status(404).send("Not Found");

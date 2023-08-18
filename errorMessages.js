@@ -1,0 +1,17 @@
+module.exports = {
+  NO_CONTENT_FOR_USER: "No content available for the user",
+  INVALID_REQUEST_PARAMS: "Invalid request parameters",
+  FOLDER_NOT_FOUND: "Folder not found",
+  CONTENT_NOT_FOUND: "Content not found",
+  INVALID_CONTENT: "Invalid content",
+  USERS_FOLDER_NOT_FOUND: "User's folder not found",
+  MISSING_OR_INVALID_TEXT: "Missing or invalid text data",
+  ERROR_SAVING_CONTENT: "Error saving content",
+  USER_NOT_FOUND: "User not found",
+  USER_VERIFICATION_FAILED: "User verification failed: missing token",
+  INVALID_CREDENTIALS: "Invalid credentials",
+  USER_SIGNED_UP_SUCCESSFULLY: "User signed up successfully",
+  USER_SIGNED_IN_SUCCESSFULLY: "User signed in successfully",
+  CONTENT_DELETED_SUCCESSFULLY: "Content deleted successfully",
+  CONTENT_SAVED_SUCCESSFULLY: "Content saved successfully",
+};

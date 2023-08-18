@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const ERRORS = require("../errorMessages");
 
 async function authenticate(req, res, next) {
   const idToken =
@@ -7,7 +8,7 @@ async function authenticate(req, res, next) {
   if (!idToken) {
     return res.status(400).json({
       success: false,
-      message: "User verification failed: missing token",
+      message: ERRORS.USER_VERIFICATION_FAILED,
     });
   }
 
@@ -19,8 +20,7 @@ async function authenticate(req, res, next) {
   } catch (error) {
     res.status(401).json({
       success: false,
-      message: "Invalid credentials",
-      errorDetail: error.message,
+      message: ERRORS.INVALID_CREDENTIALS,
     });
   }
 }
