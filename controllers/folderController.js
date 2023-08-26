@@ -1,5 +1,6 @@
 const Folder = require("../models/Folder");
 const ERRORS = require("../errorMessages");
+const { sendEventsToAll } = require("../eventBroadcaster");
 
 async function getAllContentsForUser(req, res) {
   try {
@@ -16,7 +17,7 @@ async function getAllContentsForUser(req, res) {
 
     res.status(200).json({
       success: true,
-      contents: folder.textContents,
+      contents: folder.textContent,
     });
   } catch (err) {
     res.status(400).json({
@@ -32,9 +33,8 @@ async function deleteContentForUser(req, res) {
 
     const result = await Folder.updateOne(
       { userId },
-      { $pull: { contents: { _id: contentId } } },
+      { $pull: { textContent: { _id: contentId } } },
     );
-
     if (result.n === 0) {
       return res.status(403).json({
         success: false,
@@ -63,7 +63,7 @@ async function deleteContentForUser(req, res) {
 
 async function addContentForUser(req, res) {
   try {
-    const { textContent } = req.body;
+    const { textContent, url, title, description } = req.body;
     const { userId } = req.params;
 
     if (!textContent) {
@@ -75,7 +75,16 @@ async function addContentForUser(req, res) {
 
     const result = await Folder.updateOne(
       { userId },
-      { $push: { textContent: { data: textContent } } },
+      {
+        $push: {
+          textContent: {
+            data: textContent,
+            url: url,
+            title: title,
+            description: description,
+          },
+        },
+      },
     );
 
     if (result.n === 0) {
@@ -84,6 +93,12 @@ async function addContentForUser(req, res) {
         message: ERRORS.USER_FOLDER_NOT_FOUND,
       });
     }
+
+    sendEventsToAll({
+      action: "newContent",
+      userId,
+      content: { data: textContent, url, title, description },
+    });
 
     res.status(201).json({
       success: true,

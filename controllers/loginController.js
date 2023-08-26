@@ -19,6 +19,9 @@ async function login(req, res, next) {
         textContent: [
           {
             data: "Welcome to your new folder!",
+            url: "https://www.google.com",
+            title: "Welcome",
+            description: "This is your welcome content.",
           },
         ],
       });
