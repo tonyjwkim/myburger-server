@@ -11,7 +11,6 @@ const app = express();
 
 mongoose.connect(process.env.MONGODB_URI);
 
-app.use(express.json());
 const corsOptions = {
   origin: function (_origin, callback) {
     callback(null, true);
@@ -19,6 +18,7 @@ const corsOptions = {
   methods: "GET,POST,DELETE",
 };
 
+app.use(express.json());
 app.use(cors(corsOptions));
 
 app.use("/users", loginRoutes);

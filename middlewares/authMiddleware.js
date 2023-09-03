@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-const ERRORS = require("../errorMessages");
+const MESSAGES = require("../statusMessages");
 
 async function authenticate(req, res, next) {
   const idToken =
@@ -8,19 +8,18 @@ async function authenticate(req, res, next) {
   if (!idToken) {
     return res.status(400).json({
       success: false,
-      message: ERRORS.USER_VERIFICATION_FAILED,
+      message: MESSAGES.USER_VERIFICATION_FAILED,
     });
   }
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    console.log("decoded token in server:", decodedToken);
     req.user = decodedToken;
     next();
   } catch (error) {
     res.status(401).json({
       success: false,
-      message: ERRORS.INVALID_CREDENTIALS,
+      message: MESSAGES.INVALID_CREDENTIALS,
     });
   }
 }
