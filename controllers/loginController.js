@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const Folder = require("../models/Folder");
-const ERRORS = require("../errorMessages");
+const MESSAGES = require("../statusMessages");
 
 async function login(req, res, next) {
   try {
@@ -21,7 +21,6 @@ async function login(req, res, next) {
             data: "Welcome to your new folder!",
             url: "https://www.google.com",
             title: "Welcome",
-            description: "This is your welcome content.",
           },
         ],
       });
@@ -29,14 +28,14 @@ async function login(req, res, next) {
       return res.status(201).json({
         success: true,
         userId: user._id,
-        message: ERRORS.USER_SIGNED_UP_SUCCESSFULLY,
+        message: MESSAGES.USER_SIGNED_UP_SUCCESSFULLY,
       });
     }
 
     res.status(200).json({
       success: true,
       userId: user._id,
-      message: ERRORS.USER_SIGNED_IN_SUCCESSFULLY,
+      message: MESSAGES.USER_SIGNED_IN_SUCCESSFULLY,
     });
   } catch (error) {
     next(error);
@@ -50,7 +49,7 @@ async function getUserData(req, res, next) {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: ERRORS.USER_NOT_FOUND,
+        message: MESSAGES.USER_NOT_FOUND,
       });
     }
 

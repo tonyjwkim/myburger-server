@@ -1,5 +1,5 @@
 const Folder = require("../models/Folder");
-const ERRORS = require("../errorMessages");
+const MESSAGES = require("../statusMessages");
 const { sendEventsToAll } = require("../eventBroadcaster");
 
 async function getAllContentsForUser(req, res) {
@@ -11,7 +11,7 @@ async function getAllContentsForUser(req, res) {
     if (!folder) {
       return res.status(404).json({
         success: false,
-        message: ERRORS.NO_CONTENT_FOR_USER,
+        message: MESSAGES.NO_CONTENT_FOR_USER,
       });
     }
 
@@ -22,7 +22,7 @@ async function getAllContentsForUser(req, res) {
   } catch (err) {
     res.status(400).json({
       success: false,
-      message: ERRORS.INVALID_REQUEST_PARAMS,
+      message: MESSAGES.INVALID_REQUEST_PARAMS,
     });
   }
 }
@@ -38,38 +38,38 @@ async function deleteContentForUser(req, res) {
     if (result.n === 0) {
       return res.status(403).json({
         success: false,
-        message: ERRORS.FOLDER_NOT_FOUND,
+        message: MESSAGES.FOLDER_NOT_FOUND,
       });
     }
 
     if (result.nModified === 0) {
       return res.status(404).json({
         success: false,
-        message: ERRORS.CONTENT_NOT_FOUND,
+        message: MESSAGES.CONTENT_NOT_FOUND,
       });
     }
 
     res.status(200).json({
       success: true,
-      message: ERRORS.CONTENT_DELETED_SUCCESSFULLY,
+      message: MESSAGES.CONTENT_DELETED_SUCCESSFULLY,
     });
   } catch (err) {
     res.status(400).json({
       success: false,
-      message: ERRORS.INVALID_CONTENT,
+      message: MESSAGES.INVALID_CONTENT,
     });
   }
 }
 
 async function addContentForUser(req, res) {
   try {
-    const { textContent, url, title, description } = req.body;
+    const { textContent, url, title } = req.body;
     const { userId } = req.params;
 
     if (!textContent) {
       return res.status(400).json({
         success: false,
-        message: ERRORS.MISSING_OR_INVALID_TEXT,
+        message: MESSAGES.MISSING_OR_INVALID_TEXT,
       });
     }
 
@@ -81,7 +81,6 @@ async function addContentForUser(req, res) {
             data: textContent,
             url: url,
             title: title,
-            description: description,
           },
         },
       },
@@ -90,24 +89,24 @@ async function addContentForUser(req, res) {
     if (result.n === 0) {
       return res.status(404).json({
         success: false,
-        message: ERRORS.USER_FOLDER_NOT_FOUND,
+        message: MESSAGES.USER_FOLDER_NOT_FOUND,
       });
     }
 
     sendEventsToAll({
       action: "newContent",
       userId,
-      content: { data: textContent, url, title, description },
+      content: { data: textContent, url, title },
     });
 
     res.status(201).json({
       success: true,
-      message: ERRORS.CONTENT_SAVED_SUCCESSFULLY,
+      message: MESSAGES.CONTENT_SAVED_SUCCESSFULLY,
     });
   } catch (err) {
     res.status(400).json({
       success: false,
-      message: ERRORS.ERROR_SAVING_CONTENT,
+      message: MESSAGES.ERROR_SAVING_CONTENT,
     });
   }
 }
